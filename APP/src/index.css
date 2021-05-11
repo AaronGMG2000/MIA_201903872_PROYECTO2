@@ -7,6 +7,12 @@
   overflow-y: auto;
 }
 
+.fit-image{
+  width: 100%;
+  object-fit: cover;
+  height: 40vh; /* only if you want fixed height */
+  }
+
 body {
   margin: 0;
   padding: 0;

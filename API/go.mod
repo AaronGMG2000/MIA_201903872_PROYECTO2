@@ -10,4 +10,5 @@ require (
 	github.com/gorilla/handlers v1.5.1
 	github.com/gorilla/mux v1.8.0
 	github.com/mattn/go-oci8 v0.1.1
+	github.com/rs/cors v1.7.0
 )

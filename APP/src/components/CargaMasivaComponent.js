@@ -4,8 +4,7 @@ import { FilePicker } from "react-file-picker";
 import axios from 'axios';
 class CargaMasiva extends React.Component {
     load = {};
-
-
+    
     handleFileChange = file => {
         const reader = new FileReader();
         reader.readAsText(file);
@@ -13,54 +12,12 @@ class CargaMasiva extends React.Component {
             try {
                 const doc = yaml.load(e.target.result);
                 this.load = JSON.stringify(doc, null, 2);
-                // console.log(doc);
-
+                let vectorTemporal = [];
                 for (const [e1, e2] of Object.entries(doc)) {
-/*                    console.log("cargando el archivo.... que entra")
-                    console.log(e1);
-                    console.log("nombreee:" + e2.nombre)
-
-                    console.log("apellido  de usuario:" + e2.apellido)
-
-                    console.log("password de usuario:" + e2.password)
-
-                    console.log("user___:" + e2.username)
-
-
-*/
                     for (let rec1 = 0; rec1 < e2.resultados.length; rec1++) {
-/*
-
-                        console.log("-------resultados:**------------")
-                        console.log(e2.resultados[rec1].temporada)
-                        console.log(e2.resultados[rec1].tier)
-*/
                         for (let rec2 = 0; rec2 < e2.resultados[rec1].jornadas.length; rec2++) {
-  /*                          console.log("------------Jornadas--------")
-                            console.log(e2.resultados[rec1].jornadas[rec2].jornada)
-*/
-
-
                             for (let rec3 = 0; rec3 < e2.resultados[rec1].jornadas[rec2].predicciones.length; rec3++) {
-/*                                console.log("----predicciones---")
-                                console.log(e2.resultados[rec1].jornadas[rec2].predicciones[rec3].deporte)
-
-                                console.log(e2.resultados[rec1].jornadas[rec2].predicciones[rec3].fecha)
-
-                                console.log(e2.resultados[rec1].jornadas[rec2].predicciones[rec3].visitante)
-
-                                console.log(e2.resultados[rec1].jornadas[rec2].predicciones[rec3].local)
-                                console.log("prediccion Usuario:")
-                                console.log(e2.resultados[rec1].jornadas[rec2].predicciones[rec3].prediccion.visitante)
-                                console.log(e2.resultados[rec1].jornadas[rec2].predicciones[rec3].prediccion.local)
-                                console.log("resultado:Usuario")
-                                console.log(e2.resultados[rec1].jornadas[rec2].predicciones[rec3].resultado.visitante)
-                                console.log(e2.resultados[rec1].jornadas[rec2].predicciones[rec3].resultado.local)
-
-*/
-
                                 let Carga = {
-
                                     NOMBRE: e2.nombre,
                                     APELLIDO: e2.apellido,
                                     PASSWORD: e2.password,
@@ -72,37 +29,18 @@ class CargaMasiva extends React.Component {
                                     FECHA: e2.resultados[rec1].jornadas[rec2].predicciones[rec3].fecha,
                                     E_VISITANTE: e2.resultados[rec1].jornadas[rec2].predicciones[rec3].visitante,
                                     E_LOCAL: e2.resultados[rec1].jornadas[rec2].predicciones[rec3].local,
-                                    P_LOCAL: e2.resultados[rec1].jornadas[rec2].predicciones[rec3].prediccion.local,
-
                                     P_VISITANTE: e2.resultados[rec1].jornadas[rec2].predicciones[rec3].prediccion.visitante,
-
-
+                                    P_LOCAL: e2.resultados[rec1].jornadas[rec2].predicciones[rec3].prediccion.local,
                                     R_VISITANTE: e2.resultados[rec1].jornadas[rec2].predicciones[rec3].resultado.visitante,
-
-                                    R_LOCAL: e2.resultados[rec1].jornadas[rec2].predicciones[rec3].resultado.local,
-
-
-
+                                    R_LOCAL: e2.resultados[rec1].jornadas[rec2].predicciones[rec3].resultado.local
                                 }
-                                 
-                                this.sendPost(Carga);
-
-
-
-
+                                vectorTemporal.push(Carga);
                             }
-
                         }
-                        //for
-                        //for
-                        // ESTE PRIMER LET VA ASER PARA EL PADRE QUE CONTIENE LOS A2
-
                     }
-
                 }
-                /**/
-                //  console.log(this.load);
-               
+                console.log(vectorTemporal);
+                this.sendPost(vectorTemporal);
             } catch (e) {
                 console.log(e);
             }
@@ -110,7 +48,6 @@ class CargaMasiva extends React.Component {
 
         this.setState({ title: file.name });
     };
-
 
     sendPost = async (carga) => {
         await axios
@@ -121,20 +58,29 @@ class CargaMasiva extends React.Component {
         .catch((err) => console.error(`Error: ${err}`));
        
     };
-    sendDeportes = async () => {
+    
+ /*    sendDeportes = async () => {
         await axios
-        .post("http://localhost:7000/CargarDeportes")
+        .post("http://localhost:7000/CargaMasiva")
         .then((response) => {
           console.log(response.data);
         })
         .catch((err) => console.error(`Error: ${err}`));
        
     };
-
+ */
     render() {
         this.props.setTitle("CARGA");
         return (
-            ""
+            <div className="CARD">
+                <FilePicker extensions={["yaml"]} onChange={this.handleFileChange} onError={errMsg => console.log(errMsg)}>
+                    <button className='btn btn-dark'>Seleccionar archivo</button>
+                </FilePicker>
+
+                {/* <form on onSubmit={this.sendDeportes}>
+                    <button type="submit" className="btn btn-light">CARGAR ARCHIVO</button>
+                </form> */}
+            </div>
         )
     }
 

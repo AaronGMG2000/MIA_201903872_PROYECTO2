@@ -262,9 +262,8 @@ func VerificarUsuario(w http.ResponseWriter, r *http.Request) {
 	}
 	defer db.Close()
 	base = db
-	comprobar := "SELECT Nombre_Cliente, Apellido_Cliente, Correo_Cliente, Contrasena, Fecha_Nacimiento FROM CLIENTE WHERE Correo_Cliente = '" + user.Correo_Cliente + "'"
+	comprobar := "SELECT Nombre_Cliente, Apellido_Cliente, Correo_Cliente, Contrasena, Fecha_Nacimiento FROM CLIENTE"
 	rows, _ := base.Query(comprobar)
-	println(comprobar)
 	people := make([]USUARIO, 0)
 	for rows.Next() {
 		p := new(USUARIO)
@@ -275,11 +274,7 @@ func VerificarUsuario(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(false)
 		return
 	}
-	registrar := "INSERT INTO CLIENTE VALUES ('" + user.Nombre_Cliente + "','" + user.Apellido_Cliente + "','" + user.Correo_Cliente + "','" + user.Contrasena + "','" + user.Fecha_Nacimiento + "',NULL,NULL,NULL)"
-	println(registrar)
-	base.Query(registrar)
 	json.NewEncoder(w).Encode(true)
-	return
 }
 
 func insert_USERS(w http.ResponseWriter, r *http.Request) {
@@ -326,7 +321,7 @@ func main() {
 	router.HandleFunc("/", inicio)
 	router.HandleFunc("/Usuario", getUsers)
 	router.HandleFunc("/CargaMasiva", insert_CargaMasiva).Methods("POST")
-	router.HandleFunc("/VerificarUsuario", VerificarUsuario).Methods("POST")
+	router.HandleFunc("/VerificarUsuario", VerificarUsuario).Methods("GET")
 
 	//peticion carga masiva de los deportes
 	router.HandleFunc("/CargarDeportes", insert_CargaMasivaDeporte).Methods("POST")
