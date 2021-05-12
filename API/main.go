@@ -95,7 +95,7 @@ type USUARIO struct {
 
 var Usuarios []USUARIO
 
-func getUsers(w http.ResponseWriter, r *http.Request) {
+func Logear(w http.ResponseWriter, r *http.Request) {
 
 	json.NewEncoder(w).Encode(Usuarios)
 
@@ -133,7 +133,7 @@ func main() {
 	origins := handlers.AllowedOrigins([]string{"*"})
 
 	router.HandleFunc("/", inicio)
-	router.HandleFunc("/Usuario", getUsers)
+	router.HandleFunc("/Usuario", Logear)
 	router.HandleFunc("/CargaMasiva", insert_CargaMasiva).Methods("POST")
 	router.HandleFunc("/VerificarUsuario", VerificarUsuario).Methods("POST")
 
