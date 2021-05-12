@@ -14,32 +14,31 @@ class CargaMasiva extends React.Component {
                 this.load = JSON.stringify(doc, null, 2);
                 let vectorTemporal = [];
                 for (const [e1, e2] of Object.entries(doc)) {
-                    for (let rec1 = 0; rec1 < e2.resultados.length; rec1++) {
-                        for (let rec2 = 0; rec2 < e2.resultados[rec1].jornadas.length; rec2++) {
-                            for (let rec3 = 0; rec3 < e2.resultados[rec1].jornadas[rec2].predicciones.length; rec3++) {
+                    for (let x = 0; x < e2.resultados.length; x++) {
+                        for (let y = 0; y < e2.resultados[x].jornadas.length; y++) {
+                            for (let z = 0; z < e2.resultados[x].jornadas[y].predicciones.length; z++) {
                                 let Carga = {
                                     NOMBRE: e2.nombre,
                                     APELLIDO: e2.apellido,
                                     PASSWORD: e2.password,
                                     USERNAME: e2.username,
-                                    TEMPORADA: e2.resultados[rec1].temporada,
-                                    TIER: e2.resultados[rec1].tier,
-                                    JORNADA: e2.resultados[rec1].jornadas[rec2].jornada,
-                                    DEPORTE: e2.resultados[rec1].jornadas[rec2].predicciones[rec3].deporte,
-                                    FECHA: e2.resultados[rec1].jornadas[rec2].predicciones[rec3].fecha,
-                                    E_VISITANTE: e2.resultados[rec1].jornadas[rec2].predicciones[rec3].visitante,
-                                    E_LOCAL: e2.resultados[rec1].jornadas[rec2].predicciones[rec3].local,
-                                    P_VISITANTE: e2.resultados[rec1].jornadas[rec2].predicciones[rec3].prediccion.visitante,
-                                    P_LOCAL: e2.resultados[rec1].jornadas[rec2].predicciones[rec3].prediccion.local,
-                                    R_VISITANTE: e2.resultados[rec1].jornadas[rec2].predicciones[rec3].resultado.visitante,
-                                    R_LOCAL: e2.resultados[rec1].jornadas[rec2].predicciones[rec3].resultado.local
+                                    TEMPORADA: e2.resultados[x].temporada,
+                                    TIER: e2.resultados[x].tier,
+                                    JORNADA: e2.resultados[x].jornadas[y].jornada,
+                                    DEPORTE: e2.resultados[x].jornadas[y].predicciones[z].deporte,
+                                    FECHA: e2.resultados[x].jornadas[y].predicciones[z].fecha,
+                                    EQUIPO_V: e2.resultados[x].jornadas[y].predicciones[z].visitante,
+                                    EQUIPO_L: e2.resultados[x].jornadas[y].predicciones[z].local,
+                                    PREDICCION_V: e2.resultados[x].jornadas[y].predicciones[z].prediccion.visitante,
+                                    PREDICCION_L: e2.resultados[x].jornadas[y].predicciones[z].prediccion.local,
+                                    RESULTADO_V: e2.resultados[x].jornadas[y].predicciones[z].resultado.visitante,
+                                    RESULTADO_L: e2.resultados[x].jornadas[y].predicciones[z].resultado.local
                                 }
                                 vectorTemporal.push(Carga);
                             }
                         }
                     }
                 }
-                console.log(vectorTemporal);
                 this.sendPost(vectorTemporal);
             } catch (e) {
                 console.log(e);
