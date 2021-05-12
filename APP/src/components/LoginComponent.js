@@ -3,6 +3,8 @@ import { confirmDialog } from 'primereact/confirmdialog';
 import { Calendar } from 'primereact/calendar';
 import { Toast } from 'primereact/toast';
 import axios from 'axios';
+import { Redirect } from "react-router-dom";
+import { BrowserRouter, Route } from 'react-router-dom'
 class LOGIN extends React.Component {
     
     load = {};
@@ -31,24 +33,28 @@ class LOGIN extends React.Component {
     
 
     RegistrarUsuario () {
-        let s = this.state.FECHA.getDate()+"/"+this.state.FECHA.getMonth()+"/"+this.state.FECHA.getFullYear();
-        this.setState({Fecha_Nacimiento: s});
         let data = {
             USERNAME: this.state.Usuario,         
             PASS: this.state.Contrasena,
-            NOMBRE: this.state.Nombre_Cliente,          
-            APELLIDO: this.state.Apellido_Cliente,         
+            NOMBRE: '',          
+            APELLIDO: '',         
             ID_TIER: 1,         
             FECHA_NACIMIENTO: this.state.Fecha_Nacimiento,
-            CORREO: this.state.Correo_Cliente,           
-            FOTOPERFIL: this.state.FOTOPERFIL,     
+            CORREO: '',           
+            FOTOPERFIL: '',     
         }
-        console.log(s);
         axios.post('http://localhost:7000/Logear', data)
           .then(response => {
-            if (response) {
+            if (response.RESPUESTA) {
                 this.showError();
             }else{
+                if (response.RESPUESTA1) {
+                    
+                }else{
+                    console.log(this.state.USERNAME);
+                    window.localStorage.setItem('ID', this.state.Usuario);
+                    return <Redirect to='/CargaMasiva'/>
+                }
             }
           });
       }
@@ -70,6 +76,7 @@ class LOGIN extends React.Component {
             this.setState({COM: true});
         }else{
             this.setState({COM:false});
+
         }
     }
     render() {
@@ -77,6 +84,7 @@ class LOGIN extends React.Component {
         return (
             <div className="row p-0 m-0 justify-content-center align-content-center vh100 h100">
                 <div className="col-12 col-md-8 col-xl-4">
+                
                 <Toast ref={(el) => this.toast = el} />
                     <div className="card scroll_register">
                         <div className="text-center card-header bg-danger text-white font-weight-bold">

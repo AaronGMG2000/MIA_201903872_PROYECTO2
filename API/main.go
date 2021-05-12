@@ -93,12 +93,42 @@ type USUARIO struct {
 	FOTOPERFIL       string `json:"FOTOPERFIL"`
 }
 
+type RESPUESTA struct {
+	RESPUESTA  int `json:"RESPUESTA"`
+	RESPUESTA1 int `json:"RESPUESTA1"`
+	RESPUESTA2 int `json:"RESPUESTA2"`
+}
+
 var Usuarios []USUARIO
 
 func Logear(w http.ResponseWriter, r *http.Request) {
 
 	json.NewEncoder(w).Encode(Usuarios)
+	reqBody, _ := ioutil.ReadAll(r.Body)
+	json.NewEncoder(w).Encode(reqBody)
+	var user USUARIO
+	var h RESPUESTA
 
+	json.Unmarshal(reqBody, &user)
+	db, err := sql.Open("oci8", "AARON/Marroquin1@localhost:1521/ORCL18")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer db.Close()
+	base = db
+	var respuesta int
+	var Admin int
+	_, err = db.Exec("BEGIN LOGIN (:1, :2, :3,:4);end;", user.USERNAME, user.PASS, sql.Out{Dest: respuesta}, sql.Out{Dest: Admin})
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	h.RESPUESTA = respuesta
+	h.RESPUESTA2 = Admin
+	h.RESPUESTA2 = 0
+	fmt.Println(h)
+	json.NewEncoder(w).Encode(h)
 }
 
 func VerificarUsuario(w http.ResponseWriter, r *http.Request) {
@@ -133,7 +163,7 @@ func main() {
 	origins := handlers.AllowedOrigins([]string{"*"})
 
 	router.HandleFunc("/", inicio)
-	router.HandleFunc("/Usuario", Logear)
+	router.HandleFunc("/Logear", Logear)
 	router.HandleFunc("/CargaMasiva", insert_CargaMasiva).Methods("POST")
 	router.HandleFunc("/VerificarUsuario", VerificarUsuario).Methods("POST")
 
